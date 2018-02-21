@@ -64,8 +64,8 @@ class PasswordCheckerTest extends TestCase
         $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
         $this->assertFalse($checker->validate('couldyouhearme2', static::USER_PASSWORD_HISTORY));
         $this->assertEquals('New password has been used previously, choose another', $checker->getErrorMessage());
-
     }
+
     public function test_fails_due_to_previous_password()
     {
         $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
