@@ -38,10 +38,17 @@ class PasswordCheckerTest extends TestCase
         $this->assertEquals('New password is too obvious, choose another', $checker->getErrorMessage());
     }
 
-    public function test_fails_due_to_obvious_name_password()
+    public function test_fails_due_to_obvious_joined_name_password()
     {
         $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
         $this->assertFalse($checker->validate('robertsmith', static::USER_PASSWORD_HISTORY));
+        $this->assertEquals('New password is too obvious, choose another', $checker->getErrorMessage());
+    }
+
+    public function test_fails_due_to_obvious_spaced_name_password()
+    {
+        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
+        $this->assertFalse($checker->validate('robert smith', static::USER_PASSWORD_HISTORY));
         $this->assertEquals('New password is too obvious, choose another', $checker->getErrorMessage());
     }
 
