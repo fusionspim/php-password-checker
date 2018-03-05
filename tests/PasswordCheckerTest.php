@@ -4,79 +4,126 @@ use PHPUnit\Framework\TestCase;
 
 class PasswordCheckerTest extends TestCase
 {
-    const APP_SPECIFIC_OBVIOUS_PASSWORDS = ['appname', 'companyname', 'companyltd', 'robert', 'smith', 'bob@example.com'];
-    const USER_PASSWORD_HISTORY          = [
-        '$2y$11$V8Tvqr3nyMMQrR1xE/IFgepTahAprWKWfoh.xgN7ziWdwYRsZyzCu', // couldyouhearme2
-        '$2y$11$AFhINRcNKiKR/OKAb8Is8uxovaHMjHhpsVxP8rULLoJRkGi7hhXYa', // couldyouhearmeb4
-    ];
+    protected function setUp()
+    {
+        $this->checker = new PasswordChecker(['appname', 'companyname', 'companyltd', 'robert', 'smith', 'bob@example.com']);
+        $this->checker->setPreviousPasswords([
+            '$2y$11$V8Tvqr3nyMMQrR1xE/IFgepTahAprWKWfoh.xgN7ziWdwYRsZyzCu', // couldyouhearme2
+            '$2y$11$AFhINRcNKiKR/OKAb8Is8uxovaHMjHhpsVxP8rULLoJRkGi7hhXYa', // couldyouhearmeb4
+        ]);
+    }
 
     public function test_passes_due_to_new_password()
     {
-        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
-        $this->assertTrue($checker->validate('canyouhearme1', static::USER_PASSWORD_HISTORY));
-        $this->assertNull($checker->getErrorMessage());
+        $this->assertTrue($this->checker->validate('canyouhearme1'));
     }
 
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New and confirmation passwords are different
+     */
+    public function test_fails_due_to_confirmation_mismatch()
+    {
+        $this->checker->setConfirmation('canyouhearme0');
+        $this->checker->validate('canyouhearme1');
+    }
+
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password must be at least 10 characters long
+     */
     public function test_fails_due_to_short_password()
     {
-        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
-        $this->assertFalse($checker->validate('abc', static::USER_PASSWORD_HISTORY));
-        $this->assertEquals('New password must be at least 10 characters long', $checker->getErrorMessage());
+        $this->checker->validate('abc');
     }
 
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password is too common, choose another
+     */
     public function test_fails_due_to_common_password()
     {
-        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
-        $this->assertFalse($checker->validate('1q2W3e4R5t', static::USER_PASSWORD_HISTORY));
-        $this->assertEquals('New password is too common, choose another', $checker->getErrorMessage());
+        $this->checker->validate('1q2W3e4R5t');
     }
 
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password is too obvious, choose another
+     */
     public function test_fails_due_to_obvious_company_password()
     {
-        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
-        $this->assertFalse($checker->validate('companyltd', static::USER_PASSWORD_HISTORY));
-        $this->assertEquals('New password is too obvious, choose another', $checker->getErrorMessage());
+        $this->checker->validate('companyltd');
     }
 
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password is too obvious, choose another
+     */
     public function test_fails_due_to_obvious_joined_name_password()
     {
-        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
-        $this->assertFalse($checker->validate('robertsmith', static::USER_PASSWORD_HISTORY));
-        $this->assertEquals('New password is too obvious, choose another', $checker->getErrorMessage());
+        $this->checker->validate('robertsmith');
     }
 
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password is too obvious, choose another
+     */
     public function test_fails_due_to_obvious_spaced_name_password()
     {
-        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
-        $this->assertFalse($checker->validate('robert smith', static::USER_PASSWORD_HISTORY));
-        $this->assertEquals('New password is too obvious, choose another', $checker->getErrorMessage());
+        $this->checker->validate('robert smith');
     }
 
-    public function test_fails_due_to_obvious_phone_password()
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password is too obvious, choose another
+     */
+    public function test_fails_due_to_obvious_uk_phone_password()
     {
-        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
-        $this->assertFalse($checker->validate('07777123456', static::USER_PASSWORD_HISTORY));
-        $this->assertEquals('New password is too obvious, choose another', $checker->getErrorMessage());
+        $this->checker->validate('07777123456');
     }
 
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password is too obvious, choose another
+     */
+    public function test_fails_due_to_obvious_us_phone_password()
+    {
+        $this->checker->validate('123-456-7890');
+    }
+
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password is too obvious, choose another
+     */
     public function test_fails_due_to_obvious_dob_password()
     {
-        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
-        $this->assertFalse($checker->validate('1979-01-23', static::USER_PASSWORD_HISTORY));
-        $this->assertEquals('New password is too obvious, choose another', $checker->getErrorMessage());
+        $this->checker->validate('1979-01-23');
     }
 
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password is too obvious, choose another
+     */
+    public function test_fails_due_to_obvious_date_password()
+    {
+        $this->checker->validate('31/12/1999');
+    }
+
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password has been used previously, choose another
+     */
     public function test_fails_due_to_being_current_password()
     {
-        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
-        $this->assertFalse($checker->validate('couldyouhearme2', static::USER_PASSWORD_HISTORY));
-        $this->assertEquals('New password has been used previously, choose another', $checker->getErrorMessage());
+        $this->checker->validate('couldyouhearme2');
     }
 
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password has been used previously, choose another
+     */
     public function test_fails_due_to_previous_password()
     {
-        $checker = new PasswordChecker(static::APP_SPECIFIC_OBVIOUS_PASSWORDS);
-        $this->assertFalse($checker->validate('couldyouhearmeb4', static::USER_PASSWORD_HISTORY));
-        $this->assertEquals('New password has been used previously, choose another', $checker->getErrorMessage());
+        $this->checker->validate('couldyouhearmeb4');
     }
 }
