@@ -39,7 +39,7 @@ $checker->validate($userSuppliedPassword);
 
 ### User or application obvious
 
-Provide a blacklist of words that are obvious in the context of the user/application. If they're **within the password** (i.e. not necessarily equal to) the user supplied password, validation will fail:
+Provide a blacklist of words that are obvious in the context of the user/application. If they're **within** (i.e. not necessarily equal to) the user supplied password, validation will fail:
 
 ```
 $checker = new PasswordChecker(['clem', 'fandango', 'MyAmazingApp');
