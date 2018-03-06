@@ -34,7 +34,7 @@ class PasswordChecker
             throw new PasswordException('New password is too common, choose another');
         } elseif ($this->isPasswordObvious($password)) {
             throw new PasswordException('New password is too obvious, choose another');
-        } elseif ($this->isRecentPassword($password)) {
+        } elseif (isset($this->recentHashes) && $this->isRecentPassword($password)) {
             throw new PasswordException('New password has been used previously, choose another');
         }
 

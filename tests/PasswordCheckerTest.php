@@ -13,6 +13,11 @@ class PasswordCheckerTest extends TestCase
         ]);
     }
 
+    public function test_valid_with_no_options()
+    {
+        $this->assertTrue((new PasswordChecker)->validate('canyouhearme1'));
+    }
+
     public function test_passes_due_to_new_password()
     {
         $this->assertTrue($this->checker->validate('canyouhearme1'));
