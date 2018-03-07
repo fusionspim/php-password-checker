@@ -15,7 +15,7 @@ $checker->validate('31/12/1999'); // throws PasswordException (too numeric)
 $checker->validate('we love php'); // returns true
 ```
 
-That's it. Though you can add further (optional, but recommended) checks and restrictions...
+That's it. Though you can add further (optional, but recommended) checks and restrictions.
 
 ### Password reuse
 
