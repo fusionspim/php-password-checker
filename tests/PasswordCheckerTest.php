@@ -44,6 +44,15 @@ class PasswordCheckerTest extends TestCase
 
     /**
      * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
+     * @expectedExceptionMessage New password must be at least 10 characters long
+     */
+    public function test_fails_due_to_short_multibyte_password()
+    {
+        $this->checker->validate('åèäèå');
+    }
+
+    /**
+     * @expectedException        FusionsPim\PhpPasswordChecker\PasswordException
      * @expectedExceptionMessage New password is too common, choose another
      */
     public function test_fails_due_to_common_password()
