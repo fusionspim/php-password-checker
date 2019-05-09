@@ -32,5 +32,5 @@ blocks:
       jobs:
       - name: Tests
         commands:
-          - php-cs-fixer fix --config=.php_cs --dry-run --diff -v # Too few files to restrict via CHANGED_FILES
+          - php-cs-fixer fix --config=.php_cs.dist --dry-run --diff -v # Too few files to restrict via CHANGED_FILES
           - phpunit --stop-on-failure
