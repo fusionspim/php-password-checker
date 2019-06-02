@@ -47,7 +47,7 @@ class PasswordChecker
      */
     private function isPasswordBlacklisted(string $password): bool
     {
-        return in_array(strtoupper($password), preg_split('/\v+/', strtoupper(
+        return in_array(mb_strtoupper($password), preg_split('/\v+/', mb_strtoupper(
             file_get_contents(__DIR__ . '/../resources/password-blacklist.txt')
         )));
     }
@@ -55,7 +55,7 @@ class PasswordChecker
     private function isPasswordObvious(string $password): bool
     {
         foreach ($this->rejectAsTooObvious as $obvious) {
-            if (strpos(strtolower($password), strtolower($obvious)) !== false) {
+            if (mb_strpos(mb_strtolower($password), mb_strtolower($obvious)) !== false) {
                 return true;
             }
         }
