@@ -28,13 +28,21 @@ class PasswordChecker
     {
         if (isset($this->confirm) && $this->confirm !== $password) {
             throw new PasswordException('New and confirmation passwords are different');
-        } elseif (mb_strlen($password) < static::MIN_LENGTH) {
+        }
+
+        if (mb_strlen($password) < static::MIN_LENGTH) {
             throw new PasswordException(sprintf('New password must be at least %d characters long', static::MIN_LENGTH));
-        } elseif ($this->isPasswordBlacklisted($password)) {
+        }
+
+        if ($this->isPasswordBlacklisted($password)) {
             throw new PasswordException('New password is too common, choose another');
-        } elseif ($this->isPasswordObvious($password)) {
+        }
+
+        if ($this->isPasswordObvious($password)) {
             throw new PasswordException('New password is too obvious, choose another');
-        } elseif (isset($this->recentHashes) && $this->isRecentPassword($password)) {
+        }
+
+        if (isset($this->recentHashes) && $this->isRecentPassword($password)) {
             throw new PasswordException('New password has been used previously, choose another');
         }
 
