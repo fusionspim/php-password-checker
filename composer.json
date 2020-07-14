@@ -1,17 +1,32 @@
 {
   "name": "fusionspim/php-password-checker",
   "description": "Sense checks when a user picks a new password",
-  "keywords": ["password", "validation"],
+  "keywords": [
+    "password",
+    "validation"
+  ],
   "license": "MIT",
   "require": {
     "php": ">=7.4",
     "ext-mbstring": "^7.2"
   },
   "require-dev": {
-    "fusionspim/php-cs-fixer-config": "^4.1",
+    "ergebnis/composer-normalize": "^2.6",
+    "fusionspim/php-cs-fixer-config": "^6.0",
     "phpunit/phpunit": "9.2.*"
   },
   "autoload": {
-    "psr-4": {"FusionsPim\\PhpPasswordChecker\\":"src/"}
+    "psr-4": {
+      "FusionsPim\\PhpPasswordChecker\\": "src/"
+    }
+  },
+  "scripts": {
+    "fix": [
+      "php-cs-fixer fix --config=.php_cs.dist; echo",
+      "composer normalize; echo"
+    ],
+    "test": [
+      "phpunit --stop-on-failure --stop-on-error; echo"
+    ]
   }
 }
