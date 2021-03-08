@@ -3,7 +3,9 @@ namespace FusionsPim\PhpPasswordChecker;
 
 class PasswordChecker
 {
-    private $minLength = 10;
+    public const MINIMUM_MIN_LENGTH = 10;  // Tied to the filtered password-blacklist.txt (no data for less than 10 characters)
+
+    private $minLength = self::MINIMUM_MIN_LENGTH;
     private $confirm;
     private $recentHashes;
     private $rejectAsTooObvious;
@@ -25,7 +27,7 @@ class PasswordChecker
 
     public function setMinLength(int $minLength): void
     {
-        if ($minLength > 10) {  // Tied to the filtered password-blacklist.txt
+        if ($minLength > self::MINIMUM_MIN_LENGTH) {
             $this->minLength = $minLength;
         }
     }
