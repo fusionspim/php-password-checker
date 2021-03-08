@@ -27,7 +27,7 @@ class PasswordChecker
 
     public function setMinLength(int $minLength): void
     {
-        if ($minLength > self::MINIMUM_MIN_LENGTH) {
+        if ($minLength >= self::MINIMUM_MIN_LENGTH) {
             $this->minLength = $minLength;
         }
     }
