@@ -3,7 +3,7 @@ namespace FusionsPim\PhpPasswordChecker;
 
 class PasswordChecker
 {
-    private $minLength = 10; // Tied to the filtered password-blacklist.txt - unsure what this comment means?
+    private $minLength = 10;
     private $confirm;
     private $recentHashes;
     private $rejectAsTooObvious;
@@ -25,7 +25,9 @@ class PasswordChecker
 
     public function setMinLength(int $minLength): void
     {
-        $this->minLength = $minLength;
+        if ($minLength > 10) {  // Tied to the filtered password-blacklist.txt
+            $this->minLength = $minLength;
+        }
     }
 
     public function validate(string $password): bool
