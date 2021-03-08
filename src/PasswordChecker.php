@@ -3,8 +3,7 @@ namespace FusionsPim\PhpPasswordChecker;
 
 class PasswordChecker
 {
-    private const MIN_LENGTH = 10; // Tied to the filtered password-blacklist.txt
-
+    private $minLength = 10;
     private $confirm;
     private $recentHashes;
     private $rejectAsTooObvious;
@@ -24,14 +23,21 @@ class PasswordChecker
         $this->recentHashes = $recentHashes;
     }
 
+    public function setMinLength(int $minLength): void
+    {
+        if ($minLength > 10) {  // Tied to the filtered password-blacklist.txt
+            $this->minLength = $minLength;
+        }
+    }
+
     public function validate(string $password): bool
     {
         if (isset($this->confirm) && $this->confirm !== $password) {
             throw new PasswordException('New and confirmation passwords are different');
         }
 
-        if (mb_strlen($password) < static::MIN_LENGTH) {
-            throw new PasswordException(sprintf('New password must be at least %d characters long', static::MIN_LENGTH));
+        if (mb_strlen($password) < $this->minLength) {
+            throw new PasswordException(sprintf('New password must be at least %d characters long', $this->minLength));
         }
 
         if ($this->isPasswordBlacklisted($password)) {
@@ -44,6 +50,10 @@ class PasswordChecker
 
         if (isset($this->recentHashes) && $this->isRecentPassword($password)) {
             throw new PasswordException('New password has been used previously, choose another');
+        }
+
+        if (! empty($failedRequirements = $this->checkCharacterRequirements($password))) {
+            throw new PasswordException('New password should contain ' . $this->readableList($failedRequirements));
         }
 
         return true;
@@ -80,5 +90,34 @@ class PasswordChecker
         }
 
         return false;
+    }
+
+    public function checkCharacterRequirements(string $password): array
+    {
+        $requirements = [
+            ['/[a-z]/', '1 lower case letter'],
+            ['/[A-Z]/', '1 upper case letter'],
+            ['/[\d]/', '1 number'],
+            ['/[^a-zA-Z\d]/', '1 symbol'],
+        ];
+
+        $failures = [];
+
+        foreach ($requirements as [$regex, $description]) {
+            if (! preg_match($regex, $password)) {
+                $failures[] = $description;
+            }
+        }
+
+        return $failures;
+    }
+
+    private function readableList($items = [], $join = 'and'): string
+    {
+        if (count($items) > 1) {
+            return implode(', ', array_slice($items, 0, count($items) - 1)) . ' ' . $join . ' ' . $items[count($items) - 1];
+        }
+
+        return $items[0];
     }
 }
