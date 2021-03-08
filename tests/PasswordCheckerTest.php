@@ -15,12 +15,12 @@ class PasswordCheckerTest extends TestCase
 
     public function test_valid_with_no_options(): void
     {
-        $this->assertTrue((new PasswordChecker)->validate('canyouhearme1'));
+        $this->assertTrue((new PasswordChecker)->validate('Canyouhearme1*'));
     }
 
     public function test_passes_due_to_new_password(): void
     {
-        $this->assertTrue($this->checker->validate('canyouhearme1'));
+        $this->assertTrue($this->checker->validate('Canyouhearme1*'));
     }
 
     public function test_fails_due_to_confirmation_mismatch(): void
@@ -38,6 +38,24 @@ class PasswordCheckerTest extends TestCase
         $this->expectExceptionMessage('New password must be at least 10 characters long');
 
         $this->checker->validate('abc');
+    }
+
+    public function test_fails_due_to_customized_length(): void
+    {
+        $this->checker->setMinLength(14);
+
+        $this->expectException(PasswordException::class);
+        $this->expectExceptionMessage('New password must be at least 14 characters long');
+
+        $this->checker->validate('canyouhearme1');
+    }
+
+    public function test_fails_due_to_character_requirements(): void
+    {
+        $this->expectException(PasswordException::class);
+        $this->expectExceptionMessage('New password should contain 1 upper case letter, 1 number and 1 symbol');
+
+        $this->checker->validate('canyouhearme');
     }
 
     public function test_fails_due_to_short_multibyte_password(): void
