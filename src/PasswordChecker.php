@@ -114,7 +114,7 @@ class PasswordChecker
         return $failures;
     }
 
-    private function readableList($items = [], $join = 'and'): string
+    private function readableList(array $items = [], string $join = 'and'): string
     {
         if (count($items) > 1) {
             return implode(', ', array_slice($items, 0, count($items) - 1)) . ' ' . $join . ' ' . $items[count($items) - 1];

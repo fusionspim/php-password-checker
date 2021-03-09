@@ -50,12 +50,25 @@ class PasswordCheckerTest extends TestCase
         $this->checker->validate('canyouhearme1');
     }
 
+    /**
+     * @dataProvider fails_due_to_character_requirements_data_provider
+     */
     public function test_fails_due_to_character_requirements(): void
     {
         $this->expectException(PasswordException::class);
         $this->expectExceptionMessage('New password should contain 1 upper case letter, 1 number and 1 symbol');
 
         $this->checker->validate('canyouhearme');
+    }
+
+    public function fails_due_to_character_requirements_data_provider(): iterable
+    {
+        return [
+            ['canyouhearme', 'New password should contain 1 upper case letter, 1 number and 1 symbol'],
+            ['canyouhearme1', 'New password should contain 1 upper case letter and 1 symbol'],
+            ['canyouhearme1*', 'New password should contain 1 upper case letter'],
+            ['Canyouhearme1', 'New password should contain 1 symbol'],
+        ];
     }
 
     public function test_fails_due_to_short_multibyte_password(): void
