@@ -57,7 +57,7 @@ This is disabled by defaults as it is [not necessarily recommended](https://www.
 
 ```
 $checker = new PasswordChecker;
-$checker->enableComplexityRequirements();
+$checker->setComplexityRequirements(['lowercase', 'uppercase', 'number', 'symbol']);
 $checker->validate('myamazingapp'); // throws PasswordException
 $checker->validate('myamazingapp123'); // throws PasswordException
 $checker->validate('myamazongpp123!'); // throws PasswordException

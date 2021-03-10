@@ -52,24 +52,29 @@ class PasswordCheckerTest extends TestCase
 
     /**
      * @dataProvider fails_due_to_character_requirements_data_provider
+     *
+     * @param mixed $requirements
+     * @param mixed $password
+     * @param mixed $expectedError
      */
-    public function test_fails_due_to_character_requirements(): void
+    public function test_fails_due_to_character_requirements($requirements, $password, $expectedError): void
     {
-        $this->checker->enableComplexityRequirements();
+        $this->checker->setComplexityRequirements($requirements);
 
         $this->expectException(PasswordException::class);
-        $this->expectExceptionMessage('New password should contain 1 upper case letter, 1 number and 1 symbol');
+        $this->expectExceptionMessage($expectedError);
 
-        $this->checker->validate('canyouhearme');
+        $this->checker->validate($password);
     }
 
     public function fails_due_to_character_requirements_data_provider(): iterable
     {
         return [
-            ['canyouhearme', 'New password should contain 1 upper case letter, 1 number and 1 symbol'],
-            ['canyouhearme1', 'New password should contain 1 upper case letter and 1 symbol'],
-            ['canyouhearme1*', 'New password should contain 1 upper case letter'],
-            ['Canyouhearme1', 'New password should contain 1 symbol'],
+            [['lowercase', 'uppercase', 'number', 'symbol'], 'canyouhearme', 'New password should contain 1 upper case letter, 1 number and 1 symbol'],
+            [['lowercase', 'uppercase', 'number', 'symbol'], 'canyouhearme1', 'New password should contain 1 upper case letter and 1 symbol'],
+            [['lowercase', 'uppercase', 'number', 'symbol'], 'canyouhearme1*', 'New password should contain 1 upper case letter'],
+            [['lowercase', 'uppercase', 'number', 'symbol'], 'Canyouhearme1', 'New password should contain 1 symbol'],
+            [['lowercase', 'uppercase'], 'canyouhearme1', 'New password should contain 1 upper case letter'],
         ];
     }
 

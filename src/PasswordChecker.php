@@ -9,7 +9,7 @@ class PasswordChecker
     private $confirm;
     private $recentHashes;
     private $rejectAsTooObvious;
-    private $complexityRequirements = false;
+    private $complexityRequirements = [];
 
     public function __construct(array $rejectAsTooObvious = [])
     {
@@ -33,9 +33,9 @@ class PasswordChecker
         }
     }
 
-    public function enableComplexityRequirements(): void
+    public function setComplexityRequirements(array $requirements): void
     {
-        $this->complexityRequirements = true;
+        $this->complexityRequirements = $requirements;
     }
 
     public function validate(string $password): bool
@@ -105,16 +105,16 @@ class PasswordChecker
     public function checkComplexityRequirements(string $password): array
     {
         $requirements = [
-            ['/[a-z]/', '1 lower case letter'],
-            ['/[A-Z]/', '1 upper case letter'],
-            ['/[\d]/', '1 number'],
-            ['/[^a-zA-Z\d]/', '1 symbol'],
+            ['lowercase', '/[a-z]/', '1 lower case letter'],
+            ['uppercase', '/[A-Z]/', '1 upper case letter'],
+            ['number', '/[\d]/', '1 number'],
+            ['symbol', '/[^a-zA-Z\d]/', '1 symbol'],
         ];
 
         $failures = [];
 
-        foreach ($requirements as [$regex, $description]) {
-            if (! preg_match($regex, $password)) {
+        foreach ($requirements as [$requirement, $regex, $description]) {
+            if (in_array($requirement, $this->complexityRequirements) && ! preg_match($regex, $password)) {
                 $failures[] = $description;
             }
         }
