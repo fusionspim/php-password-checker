@@ -12,6 +12,7 @@ $checker->validate('abc123'); // throws PasswordException (too short)
 $checker->validate('password123'); // throws PasswordException (too common)
 $checker->validate('123-456-7890'); // throws PasswordException (too numeric)
 $checker->validate('31/12/1999'); // throws PasswordException (too numeric)
+$checker->validate('31/12/1999'); // throws PasswordException (too numeric)
 $checker->validate('we love php'); // returns true
 ```
 
@@ -47,4 +48,19 @@ $checker->validate('myamazingapp'); // throws PasswordException
 $checker->validate('myamazingapp123'); // throws PasswordException
 $checker->validate('clemfandango'); // throws PasswordException
 $checker->validate('fandango123'); // throws PasswordException
+```
+
+### Complexity requirements
+
+Complexity requirements can be enabled to require user passwords to contain a lower case letter, upper case letter, number and special character.
+
+This is disabled by defaults as it is [not necessarily recommended](https://www.ncsc.gov.uk/collection/passwords/updating-your-approach).
+
+```
+$checker = new PasswordChecker;
+$checker->enableComplexityRequirements();
+$checker->validate('myamazingapp'); // throws PasswordException
+$checker->validate('myamazingapp123'); // throws PasswordException
+$checker->validate('myamazongpp123!'); // throws PasswordException
+$checker->validate('Myamazingapp123!); // return true
 ```

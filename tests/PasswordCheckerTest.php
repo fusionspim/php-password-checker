@@ -55,6 +55,8 @@ class PasswordCheckerTest extends TestCase
      */
     public function test_fails_due_to_character_requirements(): void
     {
+        $this->checker->enableComplexityRequirements();
+
         $this->expectException(PasswordException::class);
         $this->expectExceptionMessage('New password should contain 1 upper case letter, 1 number and 1 symbol');
 
