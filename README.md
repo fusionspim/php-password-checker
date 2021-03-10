@@ -53,7 +53,7 @@ $checker->validate('fandango123'); // throws PasswordException
 
 Complexity requirements can be enabled to require user passwords to contain a lower case letter, upper case letter, number and special character.
 
-This is disabled by defaults as it is [not necessarily recommended](https://www.ncsc.gov.uk/collection/passwords/updating-your-approach).
+This is disabled by default, since it [isn't a recommended approach](https://www.ncsc.gov.uk/collection/passwords/updating-your-approach).
 
 ```
 $checker = new PasswordChecker;
