@@ -5,10 +5,16 @@ class PasswordChecker
 {
     public const MINIMUM_MIN_LENGTH = 10;  // Tied to the filtered password-blacklist.txt (no data for less than 10 characters)
 
+    public const REQUIRE_LOWERCASE = 'lowercase';
+    public const REQUIRE_UPPERCASE = 'uppercase';
+    public const REQUIRE_NUMBER    = 'number';
+    public const REQUIRE_SYMBOL    = 'symbol';
+
     private $minLength = self::MINIMUM_MIN_LENGTH;
     private $confirm;
     private $recentHashes;
     private $rejectAsTooObvious;
+    private $complexityRequirements = [];
 
     public function __construct(array $rejectAsTooObvious = [])
     {
@@ -30,6 +36,11 @@ class PasswordChecker
         if ($minLength >= self::MINIMUM_MIN_LENGTH) {
             $this->minLength = $minLength;
         }
+    }
+
+    public function setComplexityRequirements(array $requirements): void
+    {
+        $this->complexityRequirements = $requirements;
     }
 
     public function validate(string $password): bool
@@ -54,7 +65,7 @@ class PasswordChecker
             throw new PasswordException('New password has been used previously, choose another');
         }
 
-        if (! empty($failedRequirements = $this->checkCharacterRequirements($password))) {
+        if ($this->complexityRequirements && ! empty($failedRequirements = $this->checkComplexityRequirements($password))) {
             throw new PasswordException('New password should contain ' . $this->readableList($failedRequirements));
         }
 
@@ -94,19 +105,19 @@ class PasswordChecker
         return false;
     }
 
-    public function checkCharacterRequirements(string $password): array
+    public function checkComplexityRequirements(string $password): array
     {
         $requirements = [
-            ['/[a-z]/', '1 lower case letter'],
-            ['/[A-Z]/', '1 upper case letter'],
-            ['/[\d]/', '1 number'],
-            ['/[^a-zA-Z\d]/', '1 symbol'],
+            [static::REQUIRE_LOWERCASE, '/[a-z]/', '1 lower case letter'],
+            [static::REQUIRE_UPPERCASE, '/[A-Z]/', '1 upper case letter'],
+            [static::REQUIRE_NUMBER, '/[\d]/', '1 number'],
+            [static::REQUIRE_SYMBOL, '/[^a-zA-Z\d]/', '1 symbol'],
         ];
 
         $failures = [];
 
-        foreach ($requirements as [$regex, $description]) {
-            if (! preg_match($regex, $password)) {
+        foreach ($requirements as [$requirement, $regex, $description]) {
+            if (in_array($requirement, $this->complexityRequirements) && ! preg_match($regex, $password)) {
                 $failures[] = $description;
             }
         }

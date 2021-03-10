@@ -48,3 +48,23 @@ $checker->validate('myamazingapp123'); // throws PasswordException
 $checker->validate('clemfandango'); // throws PasswordException
 $checker->validate('fandango123'); // throws PasswordException
 ```
+
+### Complexity requirements
+
+Complexity requirements can be enabled to require user passwords to contain a lower case letter, upper case letter, number and special character.
+
+This is disabled by default, since it [isn't a recommended approach](https://www.ncsc.gov.uk/collection/passwords/updating-your-approach).
+
+```
+$checker = new PasswordChecker;
+$checker->setComplexityRequirements([
+    PasswordChecker::REQUIRE_LOWERCASE,
+    PasswordChecker::REQUIRE_UPPERCASE,
+    PasswordChecker::REQUIRE_NUMBER,
+    PasswordChecker::REQUIRE_SYMBOL
+]);
+$checker->validate('myamazingapp'); // throws PasswordException
+$checker->validate('myamazingapp123'); // throws PasswordException
+$checker->validate('myamazongpp123!'); // throws PasswordException
+$checker->validate('Myamazingapp123!); // return true
+```
