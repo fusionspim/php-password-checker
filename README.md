@@ -12,7 +12,6 @@ $checker->validate('abc123'); // throws PasswordException (too short)
 $checker->validate('password123'); // throws PasswordException (too common)
 $checker->validate('123-456-7890'); // throws PasswordException (too numeric)
 $checker->validate('31/12/1999'); // throws PasswordException (too numeric)
-$checker->validate('31/12/1999'); // throws PasswordException (too numeric)
 $checker->validate('we love php'); // returns true
 ```
 
