@@ -9,6 +9,7 @@ class PasswordChecker
     private $confirm;
     private $recentHashes;
     private $rejectAsTooObvious;
+    private $characterRequirements = false;
 
     public function __construct(array $rejectAsTooObvious = [])
     {
@@ -30,6 +31,11 @@ class PasswordChecker
         if ($minLength >= self::MINIMUM_MIN_LENGTH) {
             $this->minLength = $minLength;
         }
+    }
+
+    public function enableCharacterRequirements(): void
+    {
+        $this->characterRequirements = true;
     }
 
     public function validate(string $password): bool
@@ -54,8 +60,10 @@ class PasswordChecker
             throw new PasswordException('New password has been used previously, choose another');
         }
 
-        if (! empty($failedRequirements = $this->checkCharacterRequirements($password))) {
-            throw new PasswordException('New password should contain ' . $this->readableList($failedRequirements));
+        if ($this->characterRequirements) {
+            if (! empty($failedRequirements = $this->checkCharacterRequirements($password))) {
+                throw new PasswordException('New password should contain ' . $this->readableList($failedRequirements));
+            }
         }
 
         return true;

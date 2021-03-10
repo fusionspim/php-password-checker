@@ -12,6 +12,7 @@ $checker->validate('abc123'); // throws PasswordException (too short)
 $checker->validate('password123'); // throws PasswordException (too common)
 $checker->validate('123-456-7890'); // throws PasswordException (too numeric)
 $checker->validate('31/12/1999'); // throws PasswordException (too numeric)
+$checker->validate('31/12/1999'); // throws PasswordException (too numeric)
 $checker->validate('we love php'); // returns true
 ```
 
@@ -47,4 +48,17 @@ $checker->validate('myamazingapp'); // throws PasswordException
 $checker->validate('myamazingapp123'); // throws PasswordException
 $checker->validate('clemfandango'); // throws PasswordException
 $checker->validate('fandango123'); // throws PasswordException
+```
+
+### Character requirements
+
+If you prefer users passwords to contain letters, numbers, uppercase characters and special characters you can enable the character requirements feature.
+
+```
+$checker = new PasswordChecker;
+$checker->enableCharacterRequirements();
+$checker->validate('myamazingapp'); // throws PasswordException
+$checker->validate('myamazingapp123'); // throws PasswordException
+$checker->validate('myamazongpp123!'); // throws PasswordException
+$checker->validate('Myamazingapp123!); // return true
 ```
