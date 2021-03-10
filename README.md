@@ -54,6 +54,8 @@ $checker->validate('fandango123'); // throws PasswordException
 
 If you prefer users passwords to contain letters, numbers, uppercase characters and special characters you can enable the character requirements feature.
 
+This is disabled by defaults as it is [not necessarily recommended](https://www.ncsc.gov.uk/collection/passwords/updating-your-approach).
+
 ```
 $checker = new PasswordChecker;
 $checker->enableCharacterRequirements();
