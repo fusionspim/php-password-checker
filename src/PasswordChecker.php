@@ -5,6 +5,11 @@ class PasswordChecker
 {
     public const MINIMUM_MIN_LENGTH = 10;  // Tied to the filtered password-blacklist.txt (no data for less than 10 characters)
 
+    public const REQUIRE_LOWERCASE = 'lowercase';
+    public const REQUIRE_UPPERCASE = 'uppercase';
+    public const REQUIRE_NUMBER    = 'number';
+    public const REQUIRE_SYMBOL    = 'symbol';
+
     private $minLength = self::MINIMUM_MIN_LENGTH;
     private $confirm;
     private $recentHashes;
@@ -103,10 +108,10 @@ class PasswordChecker
     public function checkComplexityRequirements(string $password): array
     {
         $requirements = [
-            ['lowercase', '/[a-z]/', '1 lower case letter'],
-            ['uppercase', '/[A-Z]/', '1 upper case letter'],
-            ['number', '/[\d]/', '1 number'],
-            ['symbol', '/[^a-zA-Z\d]/', '1 symbol'],
+            [static::REQUIRE_LOWERCASE, '/[a-z]/', '1 lower case letter'],
+            [static::REQUIRE_UPPERCASE, '/[A-Z]/', '1 upper case letter'],
+            [static::REQUIRE_NUMBER, '/[\d]/', '1 number'],
+            [static::REQUIRE_SYMBOL, '/[^a-zA-Z\d]/', '1 symbol'],
         ];
 
         $failures = [];

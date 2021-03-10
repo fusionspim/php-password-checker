@@ -69,12 +69,19 @@ class PasswordCheckerTest extends TestCase
 
     public function fails_due_to_character_requirements_data_provider(): iterable
     {
+        $allRequirements = [
+            PasswordChecker::REQUIRE_LOWERCASE,
+            PasswordChecker::REQUIRE_UPPERCASE,
+            PasswordChecker::REQUIRE_NUMBER,
+            PasswordChecker::REQUIRE_SYMBOL,
+        ];
+
         return [
-            [['lowercase', 'uppercase', 'number', 'symbol'], 'canyouhearme', 'New password should contain 1 upper case letter, 1 number and 1 symbol'],
-            [['lowercase', 'uppercase', 'number', 'symbol'], 'canyouhearme1', 'New password should contain 1 upper case letter and 1 symbol'],
-            [['lowercase', 'uppercase', 'number', 'symbol'], 'canyouhearme1*', 'New password should contain 1 upper case letter'],
-            [['lowercase', 'uppercase', 'number', 'symbol'], 'Canyouhearme1', 'New password should contain 1 symbol'],
-            [['lowercase', 'uppercase'], 'canyouhearme1', 'New password should contain 1 upper case letter'],
+            [$allRequirements, 'canyouhearme', 'New password should contain 1 upper case letter, 1 number and 1 symbol'],
+            [$allRequirements, 'canyouhearme1', 'New password should contain 1 upper case letter and 1 symbol'],
+            [$allRequirements, 'canyouhearme1*', 'New password should contain 1 upper case letter'],
+            [$allRequirements, 'Canyouhearme1', 'New password should contain 1 symbol'],
+            [[PasswordChecker::REQUIRE_UPPERCASE], 'canyouhearme1', 'New password should contain 1 upper case letter'],
         ];
     }
 
