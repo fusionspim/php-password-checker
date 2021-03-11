@@ -52,22 +52,36 @@ class PasswordCheckerTest extends TestCase
 
     /**
      * @dataProvider fails_due_to_character_requirements_data_provider
+     *
+     * @param mixed $requirements
+     * @param mixed $password
+     * @param mixed $expectedError
      */
-    public function test_fails_due_to_character_requirements(): void
+    public function test_fails_due_to_character_requirements($requirements, $password, $expectedError): void
     {
-        $this->expectException(PasswordException::class);
-        $this->expectExceptionMessage('New password should contain 1 upper case letter, 1 number and 1 symbol');
+        $this->checker->setComplexityRequirements($requirements);
 
-        $this->checker->validate('canyouhearme');
+        $this->expectException(PasswordException::class);
+        $this->expectExceptionMessage($expectedError);
+
+        $this->checker->validate($password);
     }
 
     public function fails_due_to_character_requirements_data_provider(): iterable
     {
+        $allRequirements = [
+            PasswordChecker::REQUIRE_LOWERCASE,
+            PasswordChecker::REQUIRE_UPPERCASE,
+            PasswordChecker::REQUIRE_NUMBER,
+            PasswordChecker::REQUIRE_SYMBOL,
+        ];
+
         return [
-            ['canyouhearme', 'New password should contain 1 upper case letter, 1 number and 1 symbol'],
-            ['canyouhearme1', 'New password should contain 1 upper case letter and 1 symbol'],
-            ['canyouhearme1*', 'New password should contain 1 upper case letter'],
-            ['Canyouhearme1', 'New password should contain 1 symbol'],
+            [$allRequirements, 'canyouhearme', 'New password should contain 1 upper case letter, 1 number and 1 symbol'],
+            [$allRequirements, 'canyouhearme1', 'New password should contain 1 upper case letter and 1 symbol'],
+            [$allRequirements, 'canyouhearme1*', 'New password should contain 1 upper case letter'],
+            [$allRequirements, 'Canyouhearme1', 'New password should contain 1 symbol'],
+            [[PasswordChecker::REQUIRE_UPPERCASE], 'canyouhearme1', 'New password should contain 1 upper case letter'],
         ];
     }
 
