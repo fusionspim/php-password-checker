@@ -65,7 +65,10 @@ class PasswordChecker
             throw new PasswordException('New password has been used previously, choose another');
         }
 
-        if ($this->complexityRequirements && ! empty($failedRequirements = $this->checkComplexityRequirements($password))) {
+        if (
+            ! empty($this->complexityRequirements) &&
+            ! empty($failedRequirements = $this->checkComplexityRequirements($password))
+        ) {
             throw new PasswordException('New password should contain ' . $this->readableList($failedRequirements));
         }
 
