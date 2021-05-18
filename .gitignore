@@ -2,7 +2,7 @@
 .DS_Store
 
 .phpunit.result.cache
-.php_cs.cache
+.php-cs-fixer.cache
 cs_fixer_tmp_*
 
 composer.phar
