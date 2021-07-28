@@ -1,12 +1,13 @@
 name: "Build and Push Docker Images"
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - master
-    paths:
-      - 'docker/**'
+  pull_request:
+#  workflow_dispatch:
+#  push:
+#    branches:
+#      - master
+#    paths:
+#      - 'docker/**'
 
 jobs:
   build-and-push:
