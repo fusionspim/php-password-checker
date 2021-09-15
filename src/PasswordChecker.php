@@ -83,7 +83,7 @@ class PasswordChecker
     {
         return in_array(mb_strtoupper($password), preg_split('/\v+/', mb_strtoupper(
             file_get_contents(__DIR__ . '/../resources/password-blacklist.txt')
-        )));
+        )), true);
     }
 
     private function isPasswordObvious(string $password): bool
@@ -120,7 +120,7 @@ class PasswordChecker
         $failures = [];
 
         foreach ($requirements as [$requirement, $regex, $description]) {
-            if (in_array($requirement, $this->complexityRequirements) && ! preg_match($regex, $password)) {
+            if (in_array($requirement, $this->complexityRequirements, true) && ! preg_match($regex, $password)) {
                 $failures[] = $description;
             }
         }
