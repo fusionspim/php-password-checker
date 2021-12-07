@@ -1,11 +1,11 @@
 {
   "name": "fusionspim/php-password-checker",
   "description": "Sense checks when a user picks a new password",
+  "license": "MIT",
   "keywords": [
     "password",
     "validation"
   ],
-  "license": "MIT",
   "require": {
     "php": "^7.4 || ^8.0",
     "ext-mbstring": "^7.4 || ^8.0"
