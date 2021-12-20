@@ -7,13 +7,14 @@
     "validation"
   ],
   "require": {
-    "php": "^7.4 || ^8.0",
-    "ext-mbstring": "^7.4 || ^8.0"
+    "php": "^8.0",
+    "ext-mbstring": "^8.0"
   },
   "require-dev": {
     "ergebnis/composer-normalize": "^2.6",
     "fusionspim/php-cs-fixer-config": "^9.0",
-    "phpunit/phpunit": "^9.3"
+    "phpunit/phpunit": "^9.3",
+    "rector/rector": "^0.12.8"
   },
   "autoload": {
     "psr-4": {
