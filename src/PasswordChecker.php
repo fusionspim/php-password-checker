@@ -10,15 +10,13 @@ class PasswordChecker
     public const REQUIRE_NUMBER    = 'number';
     public const REQUIRE_SYMBOL    = 'symbol';
 
-    private $minLength = self::MINIMUM_MIN_LENGTH;
-    private $confirm;
-    private $recentHashes;
-    private $rejectAsTooObvious;
-    private $complexityRequirements = [];
+    private int $minLength                = self::MINIMUM_MIN_LENGTH;
+    private string|null $confirm          = null;
+    private array|null $recentHashes      = null;
+    private array $complexityRequirements = [];
 
-    public function __construct(array $rejectAsTooObvious = [])
+    public function __construct(private array $rejectAsTooObvious = [])
     {
-        $this->rejectAsTooObvious = $rejectAsTooObvious;
     }
 
     public function setConfirmation(string $confirm): void
