@@ -42,7 +42,7 @@ $checker->validate($userSuppliedPassword);
 Provide a blacklist of words that are obvious in the context of the user/application. If they're **within** (i.e. not necessarily equal to) the user supplied password, validation will fail:
 
 ```
-$checker = new PasswordChecker(['clem', 'fandango', 'MyAmazingApp');
+$checker = new PasswordChecker(['clem', 'fandango', 'MyAmazingApp']);
 $checker->validate('myamazingapp'); // throws PasswordException
 $checker->validate('myamazingapp123'); // throws PasswordException
 $checker->validate('clemfandango'); // throws PasswordException
