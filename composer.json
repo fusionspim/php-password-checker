@@ -11,7 +11,7 @@
     "ext-mbstring": "^8.0"
   },
   "require-dev": {
-    "ergebnis/composer-normalize": "^2.6",
+    "ergebnis/composer-normalize": "^2.25",
     "fusionspim/php-cs-fixer-config": "^10.0",
     "phpunit/phpunit": "^9.3"
   },
