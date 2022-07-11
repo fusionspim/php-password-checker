@@ -20,6 +20,11 @@
       "FusionsPim\\PhpPasswordChecker\\": "src/"
     }
   },
+  "config": {
+    "allow-plugins": {
+      "ergebnis/composer-normalize": true
+    }
+  },
   "scripts": {
     "fix": [
       "php-cs-fixer fix --config=.php-cs-fixer.dist.php; echo",
